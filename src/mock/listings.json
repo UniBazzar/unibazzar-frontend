@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "title": "Math Notes",
+    "price": 50,
+    "category": "Notes",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 2,
+    "title": "Economics Textbook",
+    "price": 120,
+    "category": "Textbooks",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 3,
+    "title": "Tutoring: Physics",
+    "price": 200,
+    "category": "Tutoring",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 4,
+    "title": "Math Notes",
+    "price": 50,
+    "category": "Notes",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 5,
+    "title": "Economics Textbook",
+    "price": 120,
+    "category": "Textbooks",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 6,
+    "title": "Tutoring: Physics",
+    "price": 200,
+    "category": "Tutoring",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 7,
+    "title": "Math Notes",
+    "price": 50,
+    "category": "Notes",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 8,
+    "title": "Economics Textbook",
+    "price": 120,
+    "category": "Textbooks",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 9,
+    "title": "Tutoring: Physics",
+    "price": 200,
+    "category": "Tutoring",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 10,
+    "title": "Math Notes",
+    "price": 50,
+    "category": "Notes",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 11,
+    "title": "Economics Textbook",
+    "price": 120,
+    "category": "Textbooks",
+    "imageUrl": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 12,
+    "title": "Tutoring: Physics",
+    "price": 200,
+    "category": "Tutoring",
+    "imageUrl": "https://via.placeholder.com/150"
+  }
+]
