@@ -1,0 +1,166 @@
+import { Link } from "react-router-dom";
+import {
+  Upload,
+  ShoppingCart,
+  Users,
+  Search,
+  ShieldCheck,
+  Quote,
+} from "lucide-react";
+
+function HomePage() {
+  return (
+    <div className="flex flex-col min-h-screen mt-12">
+      {/* Hero Section */}
+      <section
+        className="relative bg-cover bg-center h-screen flex items-center justify-center"
+        style={{
+          backgroundImage: "url('./assets/pexels-rdne-7683731.jpg')",
+        }}
+      >
+        <div className="absolute inset-0 bg-black/60" />{" "}
+        {/* Optional Overlay */}
+        <div className="relative z-10 text-white text-center px-4 max-w-2xl p-8 rounded-lg drop-shadow-lg">
+          <h1 className="text-5xl md:text-8xl font-extrabold mb-6">
+            Welcome to UniBazzar
+          </h1>
+          <p className="text-xl md:text-2xl mb-8">
+            Your one-stop campus marketplace for textbooks, notes, tutoring, and
+            more.
+          </p>
+          <Link
+            to="/listings"
+            className="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold px-8 py-3 rounded-full text-lg shadow-md transition"
+          >
+            Start Browsing
+          </Link>
+        </div>
+      </section>
+
+      {/* What You Can Do Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-14">
+            What You Can Do with UniBazzar
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              {
+                title: "Sell Easily",
+                desc: "List your textbooks, notes, and services in seconds.",
+                icon: <Upload className="w-16 h-16 text-blue-600 mx-auto" />,
+              },
+              {
+                title: "Buy Affordably",
+                desc: "Find verified campus deals that match your budget.",
+                icon: (
+                  <ShoppingCart className="w-16 h-16 text-blue-600 mx-auto" />
+                ),
+              },
+              {
+                title: "Support Locals",
+                desc: "Trade within your university and support fellow students.",
+                icon: <Users className="w-16 h-16 text-blue-600 mx-auto" />,
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                {item.icon}
+                <h3 className="text-2xl font-semibold mt-6 mb-3 text-gray-900">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-gradient-to-r from-gray-50 via-white to-gray-100">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-14">
+            How It Works
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              {
+                title: "Post Items",
+                desc: "Upload textbooks, notes, or tutoring services to sell easily.",
+                icon: <Upload className="w-16 h-16 text-blue-600 mx-auto" />,
+              },
+              {
+                title: "Browse Listings",
+                desc: "Find academic materials, tutors, or even part-time jobs.",
+                icon: <Search className="w-16 h-16 text-blue-600 mx-auto" />,
+              },
+              {
+                title: "Secure Payments",
+                desc: "Pay safely via Telebirr or trusted payment methods.",
+                icon: (
+                  <ShieldCheck className="w-16 h-16 text-blue-600 mx-auto" />
+                ),
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                {item.icon}
+                <h3 className="text-2xl font-semibold mt-6 mb-3 text-gray-900">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="bg-gradient-to-r from-blue-50 to-white py-20">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-14">
+            What Our Users Say
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              {
+                name: "Hassan Abdi",
+                university: "Addis Ababa University",
+                quote:
+                  "UniBazzar helped me save money and time by connecting directly with sellers on campus!",
+              },
+              {
+                name: "Liya Teshome",
+                university: "Haramaya University",
+                quote:
+                  "I sold my old books within a day! This platform really helps students help each other.",
+              },
+              {
+                name: "Samuel Birhanu",
+                university: "Bahir Dar University",
+                quote:
+                  "The Telebirr integration makes paying super easy and secure. Highly recommended!",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 p-8 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-left"
+              >
+                <Quote className="w-8 h-8 text-blue-500 mb-4" />
+                <p className="text-gray-700 italic mb-6">“{item.quote}”</p>
+                <p className="font-semibold text-gray-900">{item.name}</p>
+                <p className="text-sm text-gray-500">{item.university}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export default HomePage;
