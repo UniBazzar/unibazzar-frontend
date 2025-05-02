@@ -10,7 +10,11 @@ function Account() {
         <h1 className="text-2xl font-bold text-gray-800">Campus Feed</h1>
         <div className="flex items-center space-x-4">
           <div className="w-10 h-10 rounded-full bg-gray-300 overflow-hidden">
-            {/* <img src={profilePic} alt="Profile" className="w-full h-full object-cover" /> */}
+            <img
+              src="/assets/default_user.png"
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
           </div>
           <span className="text-gray-800">Student</span>
         </div>
@@ -24,24 +28,42 @@ function Account() {
             <div className="flex items-center space-x-4">
               {/* <img src={profilePic} alt="Profile" className="w-16 h-16 rounded-full object-cover" /> */}
               <div>
-                <h2 className="text-lg font-bold text-gray-800">Student Profile</h2>
+                <h2 className="text-lg font-bold text-gray-800">
+                  Student Profile
+                </h2>
                 <p className="text-sm text-gray-500">367 connections</p>
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              <button className="bg-blue-500 text-white text-sm px-3 py-1 rounded">Posts</button>
-              <button className="bg-gray-200 text-sm px-3 py-1 rounded">About</button>
-              <button className="bg-gray-200 text-sm px-3 py-1 rounded">Gallery</button>
-              <button className="bg-gray-200 text-sm px-3 py-1 rounded">Videos</button>
-              <button className="bg-gray-200 text-sm px-3 py-1 rounded">Connections</button>
+              <button className="bg-blue-500 text-white text-sm px-3 py-1 rounded">
+                Posts
+              </button>
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded">
+                About
+              </button>
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded">
+                Gallery
+              </button>
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded">
+                Videos
+              </button>
+              <button className="bg-gray-200 text-sm px-3 py-1 rounded">
+                Connections
+              </button>
             </div>
           </div>
 
           <div className="bg-white shadow rounded p-4 space-y-3">
             <h3 className="font-semibold text-gray-800">Profile Settings</h3>
-            <button className="w-full bg-gray-100 py-2 rounded text-left px-3">Add bio</button>
-            <button className="w-full bg-gray-100 py-2 rounded text-left px-3">Edit profile</button>
-            <button className="w-full bg-gray-100 py-2 rounded text-left px-3">Add Interests</button>
+            <button className="w-full bg-gray-100 py-2 rounded text-left px-3">
+              Add bio
+            </button>
+            <button className="w-full bg-gray-100 py-2 rounded text-left px-3">
+              Edit profile
+            </button>
+            <button className="w-full bg-gray-100 py-2 rounded text-left px-3">
+              Add Interests
+            </button>
           </div>
 
           <div className="bg-white shadow rounded p-4">
@@ -68,7 +90,9 @@ function Account() {
                 <FaCamera />
                 <span>Photo</span>
               </div>
-              <button className="bg-blue-500 text-white px-4 py-1 rounded text-sm">Share</button>
+              <button className="bg-blue-500 text-white px-4 py-1 rounded text-sm">
+                Share
+              </button>
             </div>
           </div>
 
@@ -77,14 +101,20 @@ function Account() {
               <div className="flex items-center space-x-2">
                 {/* <img src={profilePic} alt="Profile" className="w-8 h-8 rounded-full" /> */}
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">Exploring</p>
+                  <p className="text-sm font-semibold text-gray-800">
+                    Exploring
+                  </p>
                   <p className="text-xs text-gray-500">Just now</p>
                 </div>
               </div>
-              <span className="bg-black text-white px-2 py-0.5 text-xs rounded">UPGRADE PLAN</span>
+              <span className="bg-black text-white px-2 py-0.5 text-xs rounded">
+                UPGRADE PLAN
+              </span>
             </div>
             <p className="mt-2 text-sm text-gray-700">
-              I discovered a passion for traditional Ethiopian crafts. Check out my latest creations and projects. Embracing culture and creativity!
+              I discovered a passion for traditional Ethiopian crafts. Check out
+              my latest creations and projects. Embracing culture and
+              creativity!
             </p>
             <div className="grid grid-cols-3 gap-2 mt-4">
               <div className="w-full h-24 bg-gray-200 rounded"></div>
@@ -97,14 +127,19 @@ function Account() {
 
       {/* Newsletter */}
       <div className="bg-white shadow mt-6 p-4 flex justify-between items-center max-w-6xl mx-auto rounded">
-        <p className="text-sm text-gray-600">Stay informed! Subscribe to the campus newsletter for exclusive offers!</p>
+        <p className="text-sm text-gray-600">
+          Stay informed! Subscribe to the campus newsletter for exclusive
+          offers!
+        </p>
         <div className="flex space-x-2">
           <input
             type="email"
             placeholder="Enter your university email"
             className="border px-3 py-1 rounded text-sm"
           />
-          <button className="bg-blue-500 text-white px-4 py-1 rounded text-sm">Subscribe</button>
+          <button className="bg-blue-500 text-white px-4 py-1 rounded text-sm">
+            Subscribe
+          </button>
         </div>
       </div>
     </div>
