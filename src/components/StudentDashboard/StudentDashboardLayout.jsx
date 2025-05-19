@@ -68,7 +68,6 @@ export default function StudentDashboardLayout() {
           SIDEBAR
         </span>
       </motion.button>
-      {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 h-full lg:h-screen w-64 bg-white dark:bg-gray-800 shadow-lg z-40 transition-transform duration-300 lg:sticky lg:top-0 lg:self-start lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -77,9 +76,7 @@ export default function StudentDashboardLayout() {
       >
         <div className="flex flex-col h-full w-full">
           <div className="text-2xl font-bold mb-8 flex justify-between items-center px-6 pt-6">
-            {/* Show only on small screens */}
             <span className="block lg:hidden pt-10">📚 Student Panel</span>
-            {/* Close button for mobile */}
             <button
               className="lg:hidden text-gray-400 hover:text-gray-700 p-1 ml-2 cursor-pointer"
               onClick={() => setSidebarOpen(false)}
@@ -102,6 +99,7 @@ export default function StudentDashboardLayout() {
                 <li key={item.label} className="mb-1">
                   <NavLink
                     to={item.to}
+                    end
                     className={({ isActive }) =>
                       `flex items-center p-3 rounded-lg transition-colors w-full ${
                         isActive
@@ -120,7 +118,6 @@ export default function StudentDashboardLayout() {
           </nav>
         </div>
       </aside>
-      {/* Overlay for mobile when sidebar is open */}
       {sidebarOpen && (
         <motion.div
           initial={{ opacity: 0 }}
@@ -130,7 +127,6 @@ export default function StudentDashboardLayout() {
           onClick={() => setSidebarOpen(false)}
         ></motion.div>
       )}
-      {/* Main Content */}
       <main className="flex-1 ml-0 p-2 pt-20 mt-0 transition-all duration-300 min-w-0 max-w-full overflow-x-auto">
         <div className="bg-white dark:bg-gray-800 p-2 rounded-xl shadow-xl w-full max-w-full overflow-x-auto pt-[20px]">
           <Outlet />
