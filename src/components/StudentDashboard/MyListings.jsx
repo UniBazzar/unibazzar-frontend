@@ -5,6 +5,17 @@ import api from "../../redux/api/uniBazzarApi";
 import AddListing from "./AddListing";
 import ConfirmDeleteModal from "../ui/ConfirmDeleteModal";
 import toast from "react-hot-toast";
+import { CardContainer, CardBody, CardItem } from "../ui/3d-card";
+import {
+  BookOpen,
+  BadgeDollarSign,
+  Phone,
+  University,
+  Tag,
+  Layers,
+  Edit2,
+  Trash2,
+} from "lucide-react";
 
 export default function MyListings() {
   const { user } = useSelector((state) => state.auth);
@@ -28,7 +39,7 @@ export default function MyListings() {
       .then((res) => {
         setListings(res.data.student_products || []);
       })
-      .catch((err) => {
+      .catch(() => {
         setError("Failed to fetch listings");
       })
       .finally(() => setLoading(false));
@@ -49,7 +60,7 @@ export default function MyListings() {
       await api.delete(`/api/products/student-products/${deleteModal.id}/`);
       setListings((prev) => prev.filter((item) => item.id !== deleteModal.id));
       toast.success("Listing deleted.");
-    } catch (err) {
+    } catch {
       setError("Failed to delete listing. Please try again.");
     } finally {
       setLoading(false);
@@ -67,7 +78,7 @@ export default function MyListings() {
       phone: item.phone_number || "",
       tags: item.tags || "",
       condition: item.condition || "New",
-      photo: null, // We'll show the old photo, but new upload is optional
+      photo: null,
       oldPhoto: item.photo || null,
     });
     setEditModal({ open: true, data: item });
@@ -117,7 +128,7 @@ export default function MyListings() {
       toast.success("Listing updated.");
       setEditModal({ open: false, data: null });
       setEditForm(null);
-    } catch (err) {
+    } catch {
       setError("Failed to update listing. Please try again.");
     }
   };
@@ -126,69 +137,101 @@ export default function MyListings() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-2xl mx-auto"
+      className="max-w-5xl mx-auto"
     >
-      <h2 className="text-2xl font-bold mb-6 text-blue-700 dark:text-blue-200">
-        My Listings
+      <h2 className="text-3xl font-extrabold mb-8 text-blue-700 dark:text-blue-200 flex items-center gap-3">
+        <Layers className="text-blue-400" /> My Listings
       </h2>
       {loading && <div>Loading...</div>}
       {error && <div className="text-red-500">{error}</div>}
-      <ul className="space-y-6">
-        {listings.map((item) => (
-          <motion.li
-            key={item.id}
-            whileHover={{ scale: 1.02 }}
-            className="flex flex-col md:flex-row md:items-center justify-between bg-gray-800 dark:bg-gray-900 rounded-2xl shadow-lg p-6 gap-6"
-          >
-            <div className="flex items-center gap-6 w-full md:w-auto">
-              {item.photo && (
-                <img
-                  src={item.photo}
-                  alt={item.name}
-                  className="w-40 h-40 object-cover rounded-xl border-2 border-blue-200 dark:border-blue-700 shadow-md"
-                />
-              )}
-              <div className="flex flex-col gap-2">
-                <div className="font-bold text-2xl text-blue-100 dark:text-blue-200">
-                  {item.name}
-                </div>
-                <div className="text-lg text-gray-200 dark:text-gray-300">
-                  {item.description}
-                </div>
-                <div className="text-base text-gray-300 dark:text-gray-400 mt-1 flex flex-wrap gap-4">
-                  <span>
-                    Price:{" "}
+      <motion.div
+        layout
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        {listings.map((item, idx) => (
+          <CardContainer key={item.id}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.08 }}
+            >
+              <CardBody>
+                <div className="flex flex-col gap-3">
+                  <div className="relative w-full h-48 mb-2">
+                    {item.photo && (
+                      <img
+                        src={item.photo}
+                        alt={item.name}
+                        className="w-full h-48 object-cover rounded-xl border-2 border-blue-200 dark:border-blue-700 shadow-md"
+                      />
+                    )}
+                    <span
+                      className={`absolute top-2 left-2 text-white text-xs font-semibold px-3 py-1 rounded-lg shadow-md z-10 border-2 border-white ${
+                        item.condition === "new"
+                          ? "bg-blue-600"
+                          : item.condition === "used_like_new"
+                          ? "bg-green-500"
+                          : item.condition === "used_good"
+                          ? "bg-yellow-500"
+                          : item.condition === "used_fair"
+                          ? "bg-orange-500"
+                          : "bg-gray-500"
+                      }`}
+                      style={{ letterSpacing: "0.02em" }}
+                    >
+                      {item.condition
+                        ? item.condition
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (l) => l.toUpperCase())
+                        : "-"}
+                    </span>
+                  </div>
+                  <CardItem className="flex items-center gap-2 text-xl font-bold text-blue-900 dark:text-blue-200">
+                    <BookOpen className="text-blue-400" /> {item.name}
+                  </CardItem>
+                  <CardItem className="text-gray-700 dark:text-gray-300 text-base">
+                    {item.description}
+                  </CardItem>
+                  <CardItem className="flex flex-wrap gap-3 text-sm text-gray-500 dark:text-gray-400">
+                    <BadgeDollarSign className="inline mr-1 text-green-500" />
                     <span className="font-semibold">{item.price} ETB</span>
-                  </span>
-                  <span>Category: {item.category?.name}</span>
-                  <span>Condition: {item.condition}</span>
+                    <Tag className="inline ml-3 mr-1 text-blue-400" />
+                    <span>{item.tags}</span>
+                  </CardItem>
+                  <CardItem className="flex flex-wrap gap-3 text-sm text-gray-500 dark:text-gray-400">
+                    <Layers className="inline mr-1 text-purple-400" />
+                    <span>{item.category?.name}</span>
+                    <span className="ml-3">
+                      <Phone className="inline mr-1 text-pink-400" />
+                      {item.phone_number}
+                    </span>
+                  </CardItem>
+                  <CardItem className="flex flex-wrap gap-3 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="ml-3 flex items-center">
+                      <University className="inline mr-1 text-indigo-400" />
+                      <span>University: {item.university || "-"}</span>
+                    </span>
+                  </CardItem>
+                  <div className="flex gap-2 mt-4">
+                    <button
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition font-semibold text-base shadow"
+                      onClick={() => handleEdit(item)}
+                    >
+                      <Edit2 size={18} /> Edit
+                    </button>
+                    <button
+                      className="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition font-semibold text-base shadow"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      <Trash2 size={18} /> Delete
+                    </button>
+                  </div>
                 </div>
-                <div className="text-base text-gray-400 dark:text-gray-400 mt-1 flex flex-wrap gap-4">
-                  <span>Phone: {item.phone_number}</span>
-                  <span>Tags: {item.tags}</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-3 mt-6 md:mt-0 md:ml-6">
-              <button
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer font-semibold text-lg shadow"
-                onClick={() => handleEdit(item)}
-                style={{ cursor: "pointer" }}
-              >
-                Edit
-              </button>
-              <button
-                className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition cursor-pointer font-semibold text-lg shadow"
-                onClick={() => handleDelete(item.id)}
-                style={{ cursor: "pointer" }}
-              >
-                Delete
-              </button>
-            </div>
-          </motion.li>
+              </CardBody>
+            </motion.div>
+          </CardContainer>
         ))}
-      </ul>
-      {/* Edit Modal - same format as AddListing, autofilled */}
+      </motion.div>
       {editModal.open && editForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 overflow-y-auto">
           <motion.div
@@ -310,14 +353,12 @@ export default function MyListings() {
                     setEditForm(null);
                   }}
                   className="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition cursor-pointer"
-                  style={{ cursor: "pointer" }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white transition cursor-pointer"
-                  style={{ cursor: "pointer" }}
                 >
                   Save
                 </button>
@@ -326,7 +367,6 @@ export default function MyListings() {
           </motion.div>
         </div>
       )}
-      {/* Confirm Delete Modal */}
       <ConfirmDeleteModal
         isOpen={deleteModal.open}
         onCancel={() => setDeleteModal({ open: false, id: null, name: "" })}

@@ -1,10 +1,20 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import api from "../../redux/api/uniBazzarApi";
-import ListingEditModal from "./ListingEditModal";
 import ConfirmDeleteModal from "../ui/ConfirmDeleteModal";
 import toast from "react-hot-toast";
+import { CardContainer, CardBody, CardItem } from "../ui/3d-card";
+import {
+  BookOpen,
+  BadgeDollarSign,
+  Phone,
+  University,
+  Tag,
+  Layers,
+  Edit2,
+  Trash2,
+} from "lucide-react";
 
 export default function MyServices() {
   const { user } = useSelector((state) => state.auth);
@@ -26,10 +36,10 @@ export default function MyServices() {
     api
       .get(`/api/users/${user.id}/listings/`)
       .then((res) => {
-        setListings(res.data.student_products || []);
+        setListings(res.data.student_services || []);
       })
-      .catch((err) => {
-        setError("Failed to fetch listings");
+      .catch(() => {
+        setError("Failed to fetch services");
       })
       .finally(() => setLoading(false));
   }, [user?.id]);
@@ -46,7 +56,7 @@ export default function MyServices() {
     setLoading(true);
     setError(null);
     try {
-      await api.delete(`/api/products/student-products/${deleteModal.id}/`);
+      await api.delete(`/api/services/student-services/${deleteModal.id}/`);
       setListings((prev) => prev.filter((item) => item.id !== deleteModal.id));
       toast.success("Service deleted.");
     } catch (err) {
@@ -126,79 +136,90 @@ export default function MyServices() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-2xl mx-auto"
+      className="max-w-5xl mx-auto px-2 md:px-0"
     >
       <h2 className="text-2xl font-bold mb-6 text-blue-700 dark:text-blue-200">
-        My Listings
+        My Services
       </h2>
       {loading && <div>Loading...</div>}
       {error && <div className="text-red-500">{error}</div>}
-      <ul className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {listings.map((item) => (
-          <motion.li
-            key={item.id}
-            whileHover={{ scale: 1.02 }}
-            className="flex flex-col md:flex-row md:items-center justify-between bg-gray-800 dark:bg-gray-900 rounded-2xl shadow-lg p-6 gap-6"
-          >
-            <div className="flex items-center gap-6 w-full md:w-auto">
-              {item.photo && (
-                <img
-                  src={item.photo}
-                  alt={item.name}
-                  className="w-40 h-40 object-cover rounded-xl border-2 border-blue-200 dark:border-blue-700 shadow-md"
-                />
-              )}
-              <div className="flex flex-col gap-2">
-                <div className="font-bold text-2xl text-blue-100 dark:text-blue-200">
+          <CardContainer key={item.id} className="w-full">
+            <CardBody className="bg-white/80 dark:bg-gray-900/80 rounded-3xl shadow-xl p-0 overflow-hidden border border-blue-100 dark:border-blue-900/40 relative group hover:shadow-2xl transition-all duration-300">
+              <div className="relative">
+                {item.photo && (
+                  <img
+                    src={item.photo}
+                    alt={item.name}
+                    className="w-full h-48 object-cover rounded-t-3xl border-b border-blue-100 dark:border-blue-900/40"
+                  />
+                )}
+                {item.condition && (
+                  <span
+                    className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-md ${
+                      item.condition === "New"
+                        ? "bg-green-500/80 text-white"
+                        : item.condition === "Like New"
+                        ? "bg-blue-500/80 text-white"
+                        : item.condition === "Used"
+                        ? "bg-yellow-500/80 text-gray-900"
+                        : "bg-gray-400/80 text-white"
+                    }`}
+                  >
+                    {item.condition}
+                  </span>
+                )}
+              </div>
+              <CardItem className="p-5 flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-lg font-bold text-blue-900 dark:text-blue-200">
+                  <Layers className="w-5 h-5 text-blue-400" />
                   {item.name}
                 </div>
-                <div className="text-lg text-gray-200 dark:text-gray-300">
+                <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                  <BadgeDollarSign className="w-4 h-4 text-green-500" />
+                  {item.price} ETB
+                </div>
+                <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                  <BookOpen className="w-4 h-4 text-blue-400" />
+                  {item.category?.name}
+                </div>
+                {item.university && (
+                  <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                    <University className="w-4 h-4 text-indigo-500" />
+                    {item.university}
+                  </div>
+                )}
+                <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                  <Phone className="w-4 h-4 text-blue-400" />
+                  {item.phone_number}
+                </div>
+                <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                  <Tag className="w-4 h-4 text-yellow-500" />
+                  {item.tags}
+                </div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   {item.description}
                 </div>
-                <div className="text-base text-gray-300 dark:text-gray-400 mt-1 flex flex-wrap gap-4">
-                  <span>
-                    Price:{" "}
-                    <span className="font-semibold">{item.price} ETB</span>
-                  </span>
-                  <span>Category: {item.category?.name}</span>
-                  <span>Condition: {item.condition}</span>
-                  {item.status && <span>Status: {item.status}</span>}
-                </div>
-                <div className="text-base text-gray-400 dark:text-gray-400 mt-1 flex flex-wrap gap-4">
-                  <span>Phone: {item.phone_number}</span>
-                  <span>Tags: {item.tags}</span>
-                  {item.created_at && (
-                    <span>
-                      Created: {new Date(item.created_at).toLocaleDateString()}
-                    </span>
-                  )}
-                  {item.updated_at && (
-                    <span>
-                      Updated: {new Date(item.updated_at).toLocaleDateString()}
-                    </span>
-                  )}
-                </div>
+              </CardItem>
+              <div className="flex justify-between items-center px-5 pb-5 pt-2 gap-3">
+                <button
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-700 text-white font-semibold shadow transition-all duration-200 cursor-pointer"
+                  onClick={() => handleEdit(item)}
+                >
+                  <Edit2 className="w-4 h-4" /> Edit
+                </button>
+                <button
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-700 text-white font-semibold shadow transition-all duration-200 cursor-pointer"
+                  onClick={() => handleDelete(item.id)}
+                >
+                  <Trash2 className="w-4 h-4" /> Delete
+                </button>
               </div>
-            </div>
-            <div className="flex gap-3 mt-6 md:mt-0 md:ml-6">
-              <button
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition cursor-pointer font-semibold text-lg shadow"
-                onClick={() => handleEdit(item)}
-                style={{ cursor: "pointer" }}
-              >
-                Edit
-              </button>
-              <button
-                className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition cursor-pointer font-semibold text-lg shadow"
-                onClick={() => handleDelete(item.id)}
-                style={{ cursor: "pointer" }}
-              >
-                Delete
-              </button>
-            </div>
-          </motion.li>
+            </CardBody>
+          </CardContainer>
         ))}
-      </ul>
+      </div>
       {/* Edit Modal - same format as AddListing, autofilled */}
       {editModal.open && editForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 overflow-y-auto">
@@ -337,7 +358,6 @@ export default function MyServices() {
           </motion.div>
         </div>
       )}
-      {/* Confirm Delete Modal */}
       <ConfirmDeleteModal
         isOpen={deleteModal.open}
         onCancel={() => setDeleteModal({ open: false, id: null, name: "" })}

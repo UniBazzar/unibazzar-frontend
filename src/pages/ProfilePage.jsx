@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserProfile } from "../redux/slices/authSlice";
-import api from "../redux/api/uniBazzarApi"; // Import the API instance
-import GlobalSpinner from "../components/ui/GlobalSpinner"; // Import GlobalSpinner
+import api from "../redux/api/uniBazzarApi";
+import GlobalSpinner from "../components/ui/GlobalSpinner";
 import {
   FaEdit,
   FaCamera,
@@ -16,10 +16,6 @@ import {
   FaBuilding,
   FaUser,
   FaCalendarAlt,
-  FaUserFriends, // This seems unused, consider removing if not needed for role profiles
-  FaList, // This seems unused
-  FaFilePdf, // This seems unused
-  FaUserPlus, // This seems unused
   FaIdCard, // For TIN number
   FaInfoCircle, // For Bio/Store Bio/Tutor Bio
   FaMapMarkerAlt, // For Address
@@ -28,6 +24,15 @@ import {
   FaDollarSign, // For Hourly Rate
 } from "react-icons/fa";
 import ThemeToggle from "../components/ui/ThemeToggle";
+import { CardContainer, CardBody, CardItem } from "../components/ui/3d-card";
+import {
+  Layers,
+  BadgeDollarSign,
+  BookOpen,
+  University,
+  Phone,
+  Tag,
+} from "lucide-react";
 
 const ProfileSection = ({ title, children }) => (
   <div className="mb-8">
@@ -56,6 +61,23 @@ const ProfileField = ({ icon, label, value }) => (
   </div>
 );
 
+// Helper to prettify field names
+const prettifyFieldName = (key) => {
+  return key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+};
+
+// Helper to render value nicely
+const renderFieldValue = (value) => {
+  if (typeof value === "object" && value !== null) {
+    if (Array.isArray(value)) {
+      return value.length > 0 ? value.join(", ") : "Not provided";
+    }
+    // For objects, show JSON string or prettified string
+    return JSON.stringify(value, null, 2);
+  }
+  return value || "Not provided";
+};
+
 function ProfilePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -66,6 +88,10 @@ function ProfilePage() {
   const [roleSpecificProfile, setRoleSpecificProfile] = useState(null);
   const [roleProfileLoading, setRoleProfileLoading] = useState(false);
   const [roleProfileError, setRoleProfileError] = useState(null);
+
+  const [userListings, setUserListings] = useState([]);
+  const [listingsLoading, setListingsLoading] = useState(false);
+  const [listingsError, setListingsError] = useState(null);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -134,6 +160,19 @@ function ProfilePage() {
       };
 
       fetchRoleProfile();
+    }
+  }, [user]);
+
+  // Fetch user listings
+  useEffect(() => {
+    if (user && user.id) {
+      setListingsLoading(true);
+      setListingsError(null);
+      api
+        .get(`/api/users/${user.id}/listings/`)
+        .then((res) => setUserListings(res.data.student_products || []))
+        .catch(() => setListingsError("Failed to fetch your listings."))
+        .finally(() => setListingsLoading(false));
     }
   }, [user]);
 
@@ -232,8 +271,9 @@ function ProfilePage() {
           </div>
         )}
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-1/3">
+        {/* Profile, Account, and Student Info sections side by side */}
+        <div className="flex flex-col gap-8 lg:flex-row lg:gap-8 w-full">
+          <div className="w-full lg:w-1/3">
             <ProfileSection title="Profile">
               <div className="flex flex-col items-center">
                 <div className="relative mb-6">
@@ -243,6 +283,10 @@ function ProfilePage() {
                         src={user.profile_picture}
                         alt={user.full_name}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/assets/default_user_1.webp";
+                        }}
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-neutral-400">
@@ -285,7 +329,8 @@ function ProfilePage() {
                 </button>
               </div>
             </ProfileSection>
-
+          </div>
+          <div className="w-full lg:w-1/3">
             <ProfileSection title="Account Information">
               <ProfileField
                 icon={
@@ -316,39 +361,13 @@ function ProfilePage() {
                 label="Phone Number"
                 value={user.phone_number}
               />
-              <ProfileField
-                icon={
-                  <FaGraduationCap
-                    size={20}
-                    className="text-blue-600 dark:text-white"
-                  />
-                }
-                label="University"
-                value={
-                  user.university_details?.name ||
-                  user.university ||
-                  "Not Provided"
-                }
-              />
-              {user.university_details && (
-                <ProfileField
-                  icon={
-                    <FaBuilding
-                      size={20}
-                      className="text-blue-600 dark:text-white"
-                    />
-                  }
-                  label="University Details"
-                  value={user.university_details}
-                />
-              )}
+
               <p className="text-xs text-neutral-500 dark:text-gray-300 mt-4 font-inter">
                 Member since {new Date(user.date_joined).toLocaleDateString()}
               </p>
             </ProfileSection>
           </div>
-
-          <div className="lg:w-2/3">
+          <div className="w-full lg:w-1/3">
             {/* Student Information Section */}
             {user.is_student && (
               <ProfileSection title="Student Information">
@@ -367,6 +386,7 @@ function ProfilePage() {
                   roleSpecificProfile &&
                   user.role === "student" && (
                     <>
+                      {/* Render known fields first */}
                       <ProfileField
                         icon={
                           <FaGraduationCap
@@ -374,7 +394,7 @@ function ProfilePage() {
                             className="text-blue-600 dark:text-white"
                           />
                         }
-                        label="University Name"
+                        label="University"
                         value={roleSpecificProfile.university_name}
                       />
                       <ProfileField
@@ -397,10 +417,35 @@ function ProfilePage() {
                         label="Year of Study"
                         value={roleSpecificProfile.year_of_study}
                       />
-                      {/* Add other fields from StudentProfileSerializer as needed */}
+
+                      {Object.entries(roleSpecificProfile)
+                        .filter(
+                          ([key]) =>
+                            ![
+                              "id",
+                              "university_name",
+                              "department",
+                              "year_of_study",
+                              "user",
+                              "created_at",
+                              "updated_at",
+                            ].includes(key)
+                        )
+                        .map(([key, value]) => (
+                          <ProfileField
+                            key={key}
+                            icon={
+                              <FaInfoCircle
+                                size={20}
+                                className="text-blue-600 dark:text-white"
+                              />
+                            }
+                            label={prettifyFieldName(key)}
+                            value={renderFieldValue(value)}
+                          />
+                        ))}
                     </>
                   )}
-                {/* Fallback if specific profile not loaded but basic data exists in user.student_profile_data */}
                 {!roleSpecificProfile &&
                   !roleProfileLoading &&
                   user.student_profile_data &&
@@ -416,7 +461,6 @@ function ProfilePage() {
                       value={user.student_profile_data.university_name}
                     />
                   )}
-                {/* Message if no detailed profile could be fetched and no basic data either */}
                 {!roleProfileLoading &&
                   !roleSpecificProfile &&
                   !user.student_profile_data?.id && (
@@ -508,13 +552,43 @@ function ProfilePage() {
                         label="Store Bio"
                         value={roleSpecificProfile.store_bio}
                       />
-                      {/* Add other fields from MerchantProfileSerializer as needed */}
+                      {/* Dynamically render all other fields except known/ID/internal fields */}
+                      {Object.entries(roleSpecificProfile)
+                        .filter(
+                          ([key]) =>
+                            ![
+                              "id",
+                              "store_name",
+                              "nearest_university",
+                              "nearest_university_details",
+                              "phone_number",
+                              "tin_number",
+                              "address",
+                              "store_bio",
+                              "user",
+                              "created_at",
+                              "updated_at",
+                            ].includes(key)
+                        )
+                        .map(([key, value]) => (
+                          <ProfileField
+                            key={key}
+                            icon={
+                              <FaInfoCircle
+                                size={20}
+                                className="text-blue-600 dark:text-white"
+                              />
+                            }
+                            label={prettifyFieldName(key)}
+                            value={renderFieldValue(value)}
+                          />
+                        ))}
                     </>
                   )}
                 {!roleProfileLoading &&
                   !roleSpecificProfile &&
                   !user.merchant_profile_data?.id && (
-                    <p class="text-neutral-500 dark:text-gray-400 p-4">
+                    <p className="text-neutral-500 dark:text-gray-400 p-4">
                       Detailed merchant profile not available.
                     </p>
                   )}
@@ -628,14 +702,100 @@ function ProfilePage() {
                 </p>
               </ProfileSection>
             )}
-
-            {/* Activity Section */}
-            <ProfileSection title="Recent Activity">
-              <div className="py-6 text-center text-neutral-500 dark:text-gray-300 font-inter">
-                <p>No recent activity to display</p>
-              </div>
-            </ProfileSection>
           </div>
+        </div>
+        {/* My Listings section remains full width below */}
+        <div className="mt-10">
+          <ProfileSection title="My Listings">
+            {listingsLoading && <div>Loading your listings...</div>}
+            {listingsError && (
+              <div className="text-red-500">{listingsError}</div>
+            )}
+            {!listingsLoading &&
+              !listingsError &&
+              userListings.length === 0 && (
+                <div className="text-neutral-500 dark:text-gray-400 p-4">
+                  No listings found.
+                </div>
+              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {userListings.map((item) => (
+                <CardContainer key={item.id} className="w-full">
+                  <CardBody className="bg-white/80 dark:bg-gray-900/80 rounded-3xl shadow-xl p-0 overflow-hidden border border-blue-100 dark:border-blue-900/40 relative group hover:shadow-2xl transition-all duration-300">
+                    <div className="relative">
+                      {item.photo ? (
+                        <img
+                          src={item.photo}
+                          alt={item.name}
+                          className="w-full h-48 object-cover rounded-t-3xl border-b border-blue-100 dark:border-blue-900/40"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/assets/default_user_1.webp";
+                          }}
+                        />
+                      ) : (
+                        <img
+                          src="/assets/default_user_1.webp"
+                          alt="Default"
+                          className="w-full h-48 object-cover rounded-t-3xl border-b border-blue-100 dark:border-blue-900/40"
+                        />
+                      )}
+                      {item.condition && (
+                        <span
+                          className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold shadow-lg backdrop-blur-md ${
+                            item.condition === "New"
+                              ? "bg-green-500/80 text-white"
+                              : item.condition === "Like New"
+                              ? "bg-blue-500/80 text-white"
+                              : item.condition === "Used"
+                              ? "bg-yellow-500/80 text-gray-900"
+                              : "bg-gray-400/80 text-white"
+                          }`}
+                        >
+                          {item.condition}
+                        </span>
+                      )}
+                    </div>
+                    <CardItem className="p-5 flex flex-col gap-2">
+                      <div className="flex items-center gap-2 text-lg font-bold text-blue-900 dark:text-blue-200">
+                        <Layers className="w-5 h-5 text-blue-400" />
+                        {item.name}
+                      </div>
+                      <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                        <BadgeDollarSign className="w-4 h-4 text-green-500" />
+                        {item.price} ETB
+                      </div>
+                      <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                        <BookOpen className="w-4 h-4 text-blue-400" />
+                        {item.category?.name}
+                      </div>
+                      {item.university && (
+                        <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                          <University className="w-4 h-4 text-indigo-500" />
+                          {item.university}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                        <Phone className="w-4 h-4 text-blue-400" />
+                        {item.phone_number}
+                      </div>
+                      <div className="flex items-center gap-2 text-base text-gray-700 dark:text-gray-300">
+                        <Tag className="w-4 h-4 text-yellow-500" />
+                        {Array.isArray(item.tags)
+                          ? item.tags
+                              .map((tag) => prettifyFieldName(tag))
+                              .join(", ")
+                          : prettifyFieldName(item.tags)}
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        {item.description}
+                      </div>
+                    </CardItem>
+                  </CardBody>
+                </CardContainer>
+              ))}
+            </div>
+          </ProfileSection>
         </div>
       </div>
     </div>
