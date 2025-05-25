@@ -4,6 +4,12 @@ import {
   Bars3Icon,
   XMarkIcon,
   ShoppingCartIcon,
+  HomeModernIcon,
+  ShoppingBagIcon,
+  Squares2X2Icon,
+  EnvelopeOpenIcon,
+  PencilSquareIcon, // <-- For 'Post'
+  InformationCircleIcon, // <-- For 'About'
 } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -105,11 +111,10 @@ export default function Navbar() {
       : { name: "Post", path: "/create" },
   ];
 
-  // Always add Dashboard link for desktop, right after Post
   let desktopNavLinks = [...navLinks];
   const dashboardLink = {
     name: "Dashboard",
-    path: "/dashboard-redirect", // This will be a redirect route
+    path: "/dashboard-redirect",
   };
   const postIndex = desktopNavLinks.findIndex((link) => link.name === "Post");
   if (postIndex !== -1) {
@@ -143,6 +148,10 @@ export default function Navbar() {
               initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
               animate={{ scale: 1, opacity: 1, rotate: 0 }}
               transition={{ type: "spring", stiffness: 120, damping: 10 }}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/assets/default_user_1.webp";
+              }}
             />
             <span
               className="hidden sm:inline-block text-xl lg:text-2xl font-bold bg-gradient-to-r from-[#152B67] to-blue-400 bg-clip-text text-transparent animate-gradient-move"
@@ -248,7 +257,7 @@ export default function Navbar() {
                         <button
                           onClick={() => {
                             setShowUserMenu(false);
-                            navigate("/account");
+                            navigate("/profilepage");
                           }}
                           className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors font-medium cursor-pointer"
                         >
@@ -356,12 +365,12 @@ export default function Navbar() {
             leaveTo="opacity-0"
           >
             <div
-              className="fixed inset-0 bg-black/30 z-40"
+              className="fixed inset-0 bg-black/40 z-40"
               onClick={() => setMobileMenuOpen(false)}
             />
           </Transition.Child>
-          <Dialog.Panel className="fixed inset-y-0 left-0 w-72 bg-white/90 dark:bg-[#0a1535]/95 backdrop-blur-xl shadow-2xl p-4 z-50">
-            <div className="flex justify-between items-center mb-4 border-b pb-2">
+          <Dialog.Panel className="fixed inset-y-0 left-0 w-70 max-w-full bg-white/60 dark:bg-[#0a1535]/80 backdrop-blur-2xl shadow-2xl z-50 p-0 flex flex-col border-r border-blue-200/30 dark:border-blue-800/30 animate-slide-in">
+            <div className="flex items-center justify-between px-6 pt-7 pb-2 border-b border-blue-100/30 dark:border-blue-900/30">
               <span className="flex items-center gap-2">
                 <motion.img
                   src="/assets/unibazzar_log.webp"
@@ -370,6 +379,10 @@ export default function Navbar() {
                   initial={{ scale: 0.7, opacity: 0, rotate: -10 }}
                   animate={{ scale: 1, opacity: 1, rotate: 0 }}
                   transition={{ type: "spring", stiffness: 120, damping: 10 }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/assets/default_user_1.webp";
+                  }}
                 />
                 <span className="text-lg font-bold bg-gradient-to-r from-[#152B67] to-blue-400 bg-clip-text text-transparent animate-gradient-move">
                   UniBazzar
@@ -377,46 +390,67 @@ export default function Navbar() {
               </span>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-gray-800 dark:text-gray-300 cursor-pointer"
+                className="text-gray-800 dark:text-gray-300 cursor-pointer rounded-full p-1 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition"
               >
                 <XMarkIcon className="h-6 w-6" />
               </button>
             </div>
-            <div className="flex flex-col space-y-4 mt-4">
+            <div className="flex flex-col gap-2 px-6 py-6">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className="hover:text-blue-500 transition font-medium text-gray-800 dark:text-gray-100"
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-base transition-colors duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-gray-700 dark:text-gray-200 cursor-pointer"
                   onClick={() => setMobileMenuOpen(false)}
                 >
+                  {link.name === "Home" && (
+                    <HomeModernIcon className="w-5 h-5" />
+                  )}
+                  {link.name === "Marketplace" && (
+                    <ShoppingBagIcon className="w-5 h-5" />
+                  )}
+                  {link.name === "About" && (
+                    <InformationCircleIcon className="w-5 h-5" />
+                  )}
+                  {link.name === "Contact" && (
+                    <EnvelopeOpenIcon className="w-5 h-5" />
+                  )}
+                  {link.name === "Post" && (
+                    <PencilSquareIcon
+                      className="w-5 h-5 "
+                      title="Create or Post"
+                    />
+                  )}
                   {link.name}
                 </Link>
               ))}
               <Link
                 to="/dashboard-redirect"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-base transition-colors duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-gray-700 dark:text-gray-200 cursor-pointer"
               >
+                <Squares2X2Icon className="w-5 h-5" />
                 Dashboard
               </Link>
               {user ? (
                 <>
                   <Link
                     to="/cart"
-                    className="hover:text-blue-500 transition text-gray-800 dark:text-gray-100"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-base transition-colors duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-gray-700 dark:text-gray-200 cursor-pointer"
                     onClick={() => setMobileMenuOpen(false)}
                   >
+                    <ShoppingCartIcon className="w-5 h-5" />
                     Cart ({cartCount})
                   </Link>
                   <Link
-                    to="/account"
+                    to="/profilepage"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-base transition-colors duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-gray-700 dark:text-gray-200 cursor-pointer"
                   >
+                    <FaUserCircle className="w-5 h-5" />
                     Profile
                   </Link>
-                  <span className="text-gray-800 dark:text-gray-100 font-semibold">
+                  <span className="text-gray-800 dark:text-gray-100 font-semibold px-4 py-2">
                     {user.name}
                   </span>
                   <button
@@ -424,7 +458,7 @@ export default function Navbar() {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition shadow-md"
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition shadow-md font-semibold mt-2 cursor-pointer"
                   >
                     Logout
                   </button>
@@ -433,16 +467,44 @@ export default function Navbar() {
                 <>
                   <Link
                     to="/login"
-                    className="hover:text-blue-500 transition font-medium text-gray-800 dark:text-gray-100 cursor-pointer"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-base transition-colors duration-200 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-gray-700 dark:text-gray-200 cursor-pointer"
                     onClick={() => setMobileMenuOpen(false)}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3A2.25 2.25 0 008.25 5.25V9m7.5 0V5.25A2.25 2.25 0 0015.75 3h-7.5A2.25 2.25 0 006 5.25V9m7.5 0h-7.5m7.5 0v10.5A2.25 2.25 0 0113.5 21h-3A2.25 2.25 0 008.25 19.5V9m7.5 0h-7.5"
+                      />
+                    </svg>
                     Login
                   </Link>
                   <Link
                     to="/signup"
-                    className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-semibold"
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-semibold flex items-center gap-3 cursor-pointer"
                     onClick={() => setMobileMenuOpen(false)}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
                     Sign Up
                   </Link>
                 </>
