@@ -39,6 +39,7 @@ import StudentProfileForm from "./pages/profile/forms/StudentProfileForm";
 import MerchantProfileForm from "./pages/profile/forms/MerchantProfileForm";
 import TutorProfileForm from "./pages/profile/forms/TutorProfileForm";
 import SignupCompletionHandler from "./components/SignupCompletionHandler";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Routes where Navbar and Footer should be hidden
 const noNavbarRoutes = [
@@ -101,6 +102,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+      <ScrollToTop />
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       {/* Theme Toggle Button for pages without Navbar */}
       {/* {!shouldShowNavbar && (
@@ -286,6 +288,14 @@ function AppContent() {
             element={
               <PrivateRoute requiredRoles={["tutor"]}>
                 <TutorProfileForm mode="edit" />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profilepage"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
               </PrivateRoute>
             }
           />
