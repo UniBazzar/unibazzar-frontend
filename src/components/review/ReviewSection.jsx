@@ -8,7 +8,7 @@ const CONTENT_TYPE_MAP = {
   tutor: 23,
 };
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const ReviewSection = ({ type, objectId }) => {
   const token = useSelector((state) => state.auth.token);
@@ -98,7 +98,7 @@ const ReviewSection = ({ type, objectId }) => {
         setForm({ rating: 5, comment: "" });
         setEditingId(null);
         setSuccess(editingId ? "Review updated!" : "Review submitted!");
-        
+
         return fetch(
           `${API_BASE}/api/products/reviews/?content_type=${contentTypeId}&object_id=${objectId}`,
           {

@@ -7,7 +7,7 @@ import ProductGrid from "../components/product/ProductGrid";
 import GlobalSpinner from "../components/ui/GlobalSpinner"; // Import the new GlobalSpinner
 // import { toast } from "react-toastify"; // Remove if not installed
 
-const API_BASE = "http://localhost:8000/api/products";
+const API_BASE = `${import.meta.env.VITE_API_URL}/api/products`;
 
 const MarketplacePage = () => {
   const location = useLocation();

@@ -29,7 +29,7 @@ const ProductCard = ({ product, onAddToCart, uniqueKey }) => {
       ? product.category.name
       : product.category || "";
 
-  const BACKEND_URL = "http://localhost:8000";
+  const BACKEND_URL = import.meta.env.VITE_API_URL;
   // Helper function to get valid image URL
   function getValidImageUrl(url) {
     if (!url) return null;
@@ -61,7 +61,7 @@ const ProductCard = ({ product, onAddToCart, uniqueKey }) => {
   async function handleAddToCartWithFetch(productId, dispatch, onAddToCart) {
     try {
       const res = await fetch(
-        `http://localhost:8000/api/products/merchant-products/${productId}/`
+        `${BACKEND_URL}/api/products/merchant-products/${productId}/`
       );
       if (!res.ok) throw new Error("Product not found");
       const product = await res.json();

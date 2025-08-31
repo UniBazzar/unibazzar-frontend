@@ -113,7 +113,7 @@ export const loginUser = createAsyncThunk(
     try {
       // Use axios directly to bypass all interceptors/configurations from our api instance
       const response = await axios.post(
-        "http://localhost:8000/api/users/login/",
+        `${import.meta.env.VITE_API_URL}/api/users/login/`,
         { email, password },
         {
           headers: {
