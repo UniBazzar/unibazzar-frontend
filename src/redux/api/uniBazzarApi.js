@@ -6,8 +6,9 @@ export const injectStore = (store) => {
   storeInstance = store;
 };
 
+// Use VITE_API_URL from .env for baseURL
 const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -80,7 +81,7 @@ api.interceptors.response.use(
 
         // Attempt to refresh the token
         const response = await axios.post(
-          "http://localhost:8000/api/token/refresh/",
+          `${import.meta.env.VITE_API_URL}/api/token/refresh/`,
           {
             refresh: refreshToken,
           },

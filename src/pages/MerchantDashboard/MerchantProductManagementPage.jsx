@@ -13,7 +13,7 @@ import ProductFormModal from "../../components/MerchantDashboard/ProductFormModa
 import ConfirmDeleteModal from "../../components/ui/ConfirmDeleteModal";
 // import api from '../../redux/api/uniBazzarApi'; // Assuming a configured axios instance
 
-const API_BASE_URL = "http://localhost:8000/api"; // Or your actual API base URL
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 function MerchantProductManagementPage() {
   const [products, setProducts] = useState([]);

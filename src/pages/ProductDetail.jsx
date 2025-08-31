@@ -32,7 +32,7 @@ const ProductDetail = () => {
     const tryFetch = async () => {
       // Try merchant-products first
       let res = await fetch(
-        `http://127.0.0.1:8000/api/products/merchant-products/${id}/`
+        `${import.meta.env.VITE_API_URL}/api/products/merchant-products/${id}/`
       );
       let contentType = res.headers.get("content-type");
       if (res.ok && contentType && contentType.includes("application/json")) {
@@ -41,7 +41,9 @@ const ProductDetail = () => {
         if (isEducationalCategory(catName)) {
           // Refetch from student-products if educational
           res = await fetch(
-            `http://127.0.0.1:8000/api/products/student-products/${id}/`
+            `${
+              import.meta.env.VITE_API_URL
+            }/api/products/student-products/${id}/`
           );
           contentType = res.headers.get("content-type");
           if (
@@ -66,7 +68,7 @@ const ProductDetail = () => {
       } else {
         // If not found in merchant, try student-products
         res = await fetch(
-          `http://127.0.0.1:8000/api/products/student-products/${id}/`
+          `${import.meta.env.VITE_API_URL}/api/products/student-products/${id}/`
         );
         contentType = res.headers.get("content-type");
         if (res.ok && contentType && contentType.includes("application/json")) {
@@ -77,7 +79,7 @@ const ProductDetail = () => {
         }
         // If not found in student, try tutor-services
         res = await fetch(
-          `http://127.0.0.1:8000/api/products/tutor-services/${id}/`
+          `${import.meta.env.VITE_API_URL}/api/products/tutor-services/${id}/`
         );
         contentType = res.headers.get("content-type");
         if (res.ok && contentType && contentType.includes("application/json")) {
