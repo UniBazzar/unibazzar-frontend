@@ -1,53 +1,36 @@
-**The backend code for this project is : https://github.com/Tesfamichael12/unibazzar-backend**
+# Unibazzar Frontend
 
-# 🛍️ UniBazzar
+Welcome to **Unibazzar** – your campus marketplace for students, merchants, tutors, and administrators. Unibazzar is designed to empower university communities by providing a seamless platform for buying, selling, and offering services within your campus ecosystem.
 
-Welcome to **UniBazzar** — your one-stop campus marketplace for textbooks, notes, tutoring, and more!
-This project is a full-stack web application built with React (frontend) and a Django REST API (backend, not included here).
+## 🎉 Introduction
 
----
+Unibazzar connects students, merchants, and tutors in a vibrant digital marketplace. Whether you want to buy textbooks, offer tutoring, sell products, or manage campus activities, Unibazzar brings all these features together in one modern, easy-to-use web application.
 
-## 🚀 Features
+**Key Goals:**
 
-- 🏫 Marketplace for students, merchants, and tutors
-- 📚 Buy and sell textbooks, notes, and learning materials
-- 👨‍🏫 Offer and find tutoring services
-- 🍔 List and discover food and local services
-- 🛒 Shopping cart with persistent state
-- 🔒 Authentication and role-based dashboards
-- 🌙 Light/Dark mode support
-- 📱 Responsive design for all devices
+- Foster student entrepreneurship and collaboration
+- Simplify campus commerce and service exchange
+- Provide secure, role-based dashboards for every user type
+- Enable real-time communication and feedback
 
----
+**Why Unibazzar?**
 
-## 🛠️ Tech Stack
+- Built for campus life: tailored dashboards for students, merchants, tutors, and admins
+- Modern tech stack: React, Vite, Redux, Tailwind CSS
+- Fast, responsive, and mobile-friendly
+- Open-source and community-driven
 
-- **Frontend:** React, Redux Toolkit, Tailwind CSS, React Router
-- **Backend:** Django REST Framework (not included in this repo)
-- **State Management:** Redux Toolkit
-- **API:** JWT Bearer Authentication
-
----
-
-## 🖥️ Local Development Setup
+Join us in transforming campus commerce and collaboration!
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/AbeniYirgalem/unibazzar-frontend.git
-cd unibazzar-frontend
+git clone https://github.com/UniBazzar/unibazzar-frontend.git
 ```
 
-### 2. Install Dependencies
+- The frontend now uses a `.env` file for API endpoint configuration.
 
-```bash
-npm install
-```
-
-### 3. Environment Variables
-
-- By default, the frontend expects the backend API at `http://localhost:8000/`.
-- If your backend runs elsewhere, update API URLs in `src/pages/MarketplacePage.jsx` and related files.
+- All API calls will use this value. No need to manually update URLs in source files.
 
 ### 4. Start the Development Server
 
@@ -59,7 +42,7 @@ npm run dev
 
 ### 5. Backend Setup (Required)
 
-- You must have the Django REST API running at `http://localhost:8000/`.
+- You must have the backend API running at the URL specified in your `.env` file (`VITE_API_URL`).
 - Ensure CORS is enabled for your frontend origin in the backend settings.
 
 ---
@@ -79,9 +62,6 @@ src/
 
 ---
 
-## 🛒 Key Features & Usage
-
-- **Marketplace:** Browse and filter products by category (Notes, Tutoring, etc.)
 - **Add to Cart:** Click the cart icon on any product to add it to your cart.
 - **Cart Persistence:** Cart state is saved in localStorage.
 - **Authentication:** Login required for most features.
@@ -92,7 +72,6 @@ src/
 ## 📝 Scripts
 
 - `npm run dev` — Start the development server
-- `npm run build` — Build for production
 - `npm run lint` — Lint the codebase
 
 ---
